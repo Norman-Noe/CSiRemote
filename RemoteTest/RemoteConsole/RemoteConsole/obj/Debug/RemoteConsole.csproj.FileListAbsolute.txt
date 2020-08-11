@@ -1,0 +1,9 @@
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\RemoteConsole.exe.config
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\RemoteConsole.exe
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\RemoteConsole.pdb
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\SAP2000v1.dll
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csprojAssemblyReference.cache
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csproj.CoreCompileInputs.cache
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csproj.CopyComplete
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.exe
+C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.pdb
