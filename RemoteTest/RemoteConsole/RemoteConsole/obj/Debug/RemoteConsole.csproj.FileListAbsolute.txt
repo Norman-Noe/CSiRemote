@@ -7,3 +7,11 @@ C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteC
 C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csproj.CopyComplete
 C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.exe
 C:\Users\nnoe\Documents\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.pdb
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\RemoteConsole.exe.config
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\RemoteConsole.exe
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\bin\Debug\RemoteConsole.pdb
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csprojAssemblyReference.cache
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csproj.CoreCompileInputs.cache
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.csproj.CopyComplete
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.exe
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\RemoteConsole\obj\Debug\RemoteConsole.pdb
