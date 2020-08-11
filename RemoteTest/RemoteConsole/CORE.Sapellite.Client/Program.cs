@@ -14,7 +14,9 @@ namespace CORE.Sapellite.Client
     {
         static void Main(string[] args)
         {
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            //IPAddress ip = IPAddress.Parse("127.0.0.1");
+            IPAddress ip = IPAddress.Parse("10.1.12.126");
+
             int port = 5000;
             TcpClient client = new TcpClient();
             client.Connect(ip, port);
