@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteConsole", "RemoteConsole\RemoteConsole.csproj", "{6F978F91-C4A2-43A2-9D24-2F2D9BB86721}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CORE.Sapellite.Orchestrator", "CORE.Sapellite.Orchestrator\CORE.Sapellite.Orchestrator.csproj", "{D878D57E-EEDC-4B83-8D78-D3F326642209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CORE.Sapellite.Server", "CORE.Sapellite.Server\CORE.Sapellite.Server.csproj", "{0BA9A717-53B2-4475-AD63-5F15F99FBD3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CORE.Sapellite.Client", "CORE.Sapellite.Client\CORE.Sapellite.Client.csproj", "{CFEC3B58-5929-4A87-A0F2-1C6B1F94E9F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{6F978F91-C4A2-43A2-9D24-2F2D9BB86721}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F978F91-C4A2-43A2-9D24-2F2D9BB86721}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F978F91-C4A2-43A2-9D24-2F2D9BB86721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D878D57E-EEDC-4B83-8D78-D3F326642209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D878D57E-EEDC-4B83-8D78-D3F326642209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D878D57E-EEDC-4B83-8D78-D3F326642209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D878D57E-EEDC-4B83-8D78-D3F326642209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA9A717-53B2-4475-AD63-5F15F99FBD3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA9A717-53B2-4475-AD63-5F15F99FBD3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA9A717-53B2-4475-AD63-5F15F99FBD3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA9A717-53B2-4475-AD63-5F15F99FBD3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFEC3B58-5929-4A87-A0F2-1C6B1F94E9F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFEC3B58-5929-4A87-A0F2-1C6B1F94E9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFEC3B58-5929-4A87-A0F2-1C6B1F94E9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFEC3B58-5929-4A87-A0F2-1C6B1F94E9F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

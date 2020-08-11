@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6F978F91-C4A2-43A2-9D24-2F2D9BB86721}</ProjectGuid>
+    <ProjectGuid>{CFEC3B58-5929-4A87-A0F2-1C6B1F94E9F8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RemoteConsole</RootNamespace>
-    <AssemblyName>RemoteConsole</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>CORE.Sapellite.Client</RootNamespace>
+    <AssemblyName>CORE.Sapellite.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SAP2000v1">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Computers and Structures\SAP2000 22\SAP2000v1.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
