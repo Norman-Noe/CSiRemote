@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CORE.Saptellite.Library;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,12 +11,28 @@ using System.Threading.Tasks;
 
 namespace CORE.Sapellite.Orchestrator
 {
+
+    public class SapelliteTcpClient
+    {
+        public TcpClient TcpClient { get; set; }
+        public ResponseIdentification ResponseIdentification { get; set; }
+
+        public SapelliteTcpClient(TcpClient tcpClient, ResponseIdentification id)
+        {
+            this.TcpClient = tcpClient;
+            this.ResponseIdentification = id;
+        }
+    }
+
+
     //https://stackoverflow.com/questions/43431196/c-sharp-tcp-ip-simple-chat-with-multiple-clients
     class Program
     {
         static readonly object _lock = new object();
         static readonly Dictionary<int, TcpClient> list_clients = new Dictionary<int, TcpClient>();
 
+        static readonly List<SapelliteTcpClient> SapelliteClients = new List<SapelliteTcpClient>();
+        static readonly List<SapelliteTcpClient> SapelliteServers = new List<SapelliteTcpClient>();
 
         static void Main(string[] args)
         {
@@ -32,7 +50,15 @@ namespace CORE.Sapellite.Orchestrator
                 Thread t = new Thread(handle_clients);
                 t.Start(count);
                 count++;
+                RequestIdentification(client);
             }
+        }
+
+        public static void RequestIdentification(TcpClient client)
+        {
+            TcpMessage m = new TcpMessage("RequestIdentification");
+            
+            broadcast(client, m);
         }
 
         public static void handle_clients(object o)
@@ -54,8 +80,12 @@ namespace CORE.Sapellite.Orchestrator
                 }
 
                 string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
-                broadcast(data);
-                Console.WriteLine(data);
+
+                TcpMessage msg = JsonConvert.DeserializeObject<TcpMessage>(data);
+
+                HandleServerMessage(client, msg);
+                //broadcast(data);
+                //Console.WriteLine(data);
             }
 
             lock (_lock) list_clients.Remove(id);
@@ -63,6 +93,50 @@ namespace CORE.Sapellite.Orchestrator
             client.Close();
         }
 
+        private static void HandleServerMessage(TcpClient client, TcpMessage msg)
+        {
+            switch (msg.Name)
+            {
+                case MsgNames.ResponseIdentification:
+                    HandleResponseIdentification(client, msg);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        private static void HandleResponseIdentification(TcpClient client, TcpMessage msg)
+        {
+            var id = JsonConvert.DeserializeObject<ResponseIdentification>(msg.Content);
+            var newConnection = new SapelliteTcpClient(client, id);
+
+            if (id.Role == MsgNames.ServerRole)
+            {
+                SapelliteServers.Add(newConnection);
+            }
+            else if (id.Role == MsgNames.ClientRole)
+            {
+                SapelliteClients.Add(newConnection);
+            }
+            Console.WriteLine($"New {id.Role} connected: {id.UserName}");
+        }
+
+
+        public static void broadcast(TcpClient client, TcpMessage data)
+        {
+
+            var json = JsonConvert.SerializeObject(data);
+
+            byte[] buffer = Encoding.ASCII.GetBytes(json);//data + Environment.NewLine);
+
+            lock (_lock)
+            {
+                NetworkStream stream = client.GetStream();
+                stream.Write(buffer, 0, buffer.Length);
+            }
+        }
+
+        
         public static void broadcast(string data)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(data + Environment.NewLine);
@@ -72,7 +146,6 @@ namespace CORE.Sapellite.Orchestrator
                 foreach (TcpClient c in list_clients.Values)
                 {
                     NetworkStream stream = c.GetStream();
-
                     stream.Write(buffer, 0, buffer.Length);
                 }
             }
