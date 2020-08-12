@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,11 @@ namespace CORE.Sapellite.Server
 
         public System.Diagnostics.Process Process { get; set; }
         public int Port { get; set; }
-        
+
+        public void Kill()
+        {
+            this.Process.Kill();
+        }
     }
 
 
@@ -73,20 +78,55 @@ namespace CORE.Sapellite.Server
             return sapProcesses;
         }
 
+        static bool ConsoleEventCallback(int eventType)
+        {
+            if (eventType == 2)
+            {
+                Console.WriteLine("Closing down SAP instances");
+                foreach (SapProcess process in Program.SapProcesses)
+                {
+                    process.Kill();
+                }
+            }
+            return false;
+        }
+
+        static ConsoleEventDelegate handler;   // Keeps it from getting garbage collected
+                                               // Pinvoke
+        private delegate bool ConsoleEventDelegate(int eventType);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleCtrlHandler(ConsoleEventDelegate callback, bool add);
+
         public static SapProcess StartSapInstance(int port)
         {
+
             //"C:\Program Files\Computers and Structures\SAP2000 22\CSiAPIService.exe"
             var p = new System.Diagnostics.Process();
             p.StartInfo.FileName = @"C:\Program Files\Computers and Structures\SAP2000 22\CSiAPIService.exe";
             p.StartInfo.Arguments = $"-p {port}"; //"/c echo Foo && echo Bar";
-            //p.StartInfo.RedirectStandardOutput = true;
-            //p.StartInfo.UseShellExecute = false;
-            //p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+
+            p.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
+            p.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+            //* Start process and handlers
             p.Start();
+            p.BeginOutputReadLine();
+            Thread.Sleep(500); //let it prep for some time.
+            //p.BeginErrorReadLine();
+
             //p.StandardOutput.ReadToEnd()
             //p.StandardOutput.ReadToEnd().Dump();
             SapProcess sapProcess = new SapProcess(p, port);
             return sapProcess;
+        }
+
+        static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            Console.WriteLine(outLine.Data);
         }
 
         public static int GetAvailablePort(int startingPort)
@@ -122,6 +162,9 @@ namespace CORE.Sapellite.Server
         static void Main(string[] args)
         {
             Console.WriteLine("Starting Sapellite server");
+            //AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit; //new EventHandler(CurrentDomain_ProcessExit);
+            handler = new ConsoleEventDelegate(ConsoleEventCallback);
+            SetConsoleCtrlHandler(handler, true);
 
             var numInstances = GetNumberOfDesiredInstances();
             var sapInstances = StartSapInstances(numInstances);

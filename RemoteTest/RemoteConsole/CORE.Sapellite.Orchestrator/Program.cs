@@ -36,6 +36,7 @@ namespace CORE.Sapellite.Orchestrator
 
         static void Main(string[] args)
         {
+
             Console.WriteLine("Launching Orchestrator");
 
             int count = 1;
@@ -56,6 +57,7 @@ namespace CORE.Sapellite.Orchestrator
             }
         }
 
+
         public static void RequestIdentification(TcpClient client)
         {
             TcpMessage m = new TcpMessage("RequestIdentification");
@@ -74,6 +76,7 @@ namespace CORE.Sapellite.Orchestrator
             {
                 NetworkStream stream = client.GetStream();
                 byte[] buffer = new byte[1024];
+
                 int byte_count = stream.Read(buffer, 0, buffer.Length);
 
                 if (byte_count == 0)
