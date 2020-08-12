@@ -15,10 +15,10 @@
         <ScrollViewer Grid.Column="0" x:Name ="scrollviewer">
             <DataGrid x:Name="InfillCases" VerticalAlignment="Top">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Case Name" Width="1*"/>
-                    <DataGridTextColumn Header="Status" Width="1*"/>
-                    <DataGridTextColumn Header="Action" Width="1*"/>
-                    <DataGridTextColumn Header="Location" Width="1*"/>
+                    <DataGridTextColumn Header="Case Name" Width="1*" Binding="{Binding _name}"/>
+                    <DataGridTextColumn Header="Status" Width="1*" Binding="{Binding _status}"/>
+                    <DataGridTextColumn Header="Action" Width="1*" Binding="{Binding _action}"/>
+                    <DataGridTextColumn Header="Location" Width="1*" Binding="{Binding _location}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
@@ -38,7 +38,7 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Content="RUN SELECTED LOAD CASE ON:"/>
-                <ComboBox Grid.Row="1" Margin="10" />
+                <ComboBox Grid.Row="1" Margin="10" x:Name="MachineLocation" />
                 <Button Grid.Row="2" x:Name ="confirmbutton" Background="White"  Content ="ASSIGN" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="Confirmbutton_Click"/>
                 <Button Grid.Row="3" x:Name ="DoNotRunButton" Background="White"  Content ="Do Not Run Selected" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="DoNotRunButton_Click"/>
             </Grid>

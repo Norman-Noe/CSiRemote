@@ -24,26 +24,27 @@ namespace WPF
         public MainWindow()
         {
             InitializeComponent();
-            
 
-            InfillCases.Items.Add(lc);
+            //Current SAP22 load cases
+            List<LoadCase> LoadCases = GetCurrentLoadCases();
 
+            //Populate initial datagrid
+            foreach(LoadCase lc in LoadCases)
+            {
+                InfillCases.Items.Add(lc);
+            }
 
-            //write to list
+            //Get Potential machine locations here?
+            MachineLocation ml1 = new MachineLocation("IL1M113", 11650);
+            MachineLocation ml2 = new MachineLocation("IL1M113", 49150);
 
-
-
-
-
-            //Retrieve current instance
-            //cOAPI SapObjectClient = null;
-            //cHelper HelperClient = new Helper();
-            //SapObjectClient = HelperClient.GetObject("CSI.SAP2000.API.SapObject");
-            //cSapModel SapModelClient = SapObjectClient.SapModel;
+            MachineLocation.Items.Add("Client");
+            MachineLocation.Items.Add(ml1.ToString());
+            MachineLocation.Items.Add(ml2.ToString());
         }
 
-
-        public static List<LoadCase> PopulateGrid()
+        //Can move this somewhere else
+        public static List<LoadCase> GetCurrentLoadCases()
         {
             //Retrieve current instance
             cOAPI SapObjectClient = null;
@@ -63,22 +64,17 @@ namespace WPF
             ret = SapModelClient.Analyze.GetRunCaseFlag(ref numberofitemsrun, ref casenamesrun, ref run);
 
             List<int> statuslist = new List<int>();
+            List<LoadCase> loadcases = new List<LoadCase>();
 
             for (int i = 0; i < numberofitems;i++)
             {
                 LoadCase lc = new LoadCase(casenames[i], status[i], true, "Client");
-                
+                loadcases.Add(lc);
             }
-            InfillCases.Items.Add(lc);
-
-
-
+          
+            return loadcases;
         }
-
-        public static void PopulateDropdown()
-        {
-
-        }
+    
 
         /// <summary>
         /// Assign selected grid to a specific drop down
@@ -87,7 +83,17 @@ namespace WPF
         /// <param name="e"></param>
         private void Confirmbutton_Click(object sender, RoutedEventArgs e)
         {
+            string currentdropdown = MachineLocation.Text;
 
+            var selecteditems = InfillCases.SelectedItems;
+
+            foreach (LoadCase lc in selecteditems)
+            {
+                lc._action = "Run";
+                lc._location = currentdropdown;
+            }
+
+            InfillCases.Items.Refresh();
         }
 
         /// <summary>
@@ -97,7 +103,15 @@ namespace WPF
         /// <param name="e"></param>
         private void DoNotRunButton_Click(object sender, RoutedEventArgs e)
         {
+            var selecteditems = InfillCases.SelectedItems;
 
+            foreach (LoadCase lc in selecteditems)
+            {
+                lc._action = "Do Not Run";
+                lc._location = "NA";
+            }
+
+            InfillCases.Items.Refresh();
         }
 
         /// <summary>
@@ -107,7 +121,11 @@ namespace WPF
         /// <param name="e"></param>
         private void RunAnalysis_Click(object sender, RoutedEventArgs e)
         {
+            //save model on p drive
 
+            //couple locations/ports togethor
+
+            //
         }
     }
 }

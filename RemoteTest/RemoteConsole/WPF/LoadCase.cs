@@ -8,12 +8,20 @@ namespace WPF
 {
     public class LoadCase
     {
+        #region public properties.. im lazy
         public string _name { get; set; }
         public string _status { get; set; }
         public string _action { get; set; }
         public string _location { get; set; }
+        #endregion
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="status"></param>
+        /// <param name="action"></param>
+        /// <param name="location"></param>
         public LoadCase(string name, int status, bool action, string location)
         {
 
@@ -49,6 +57,7 @@ namespace WPF
 
             _location = location;
         }
+
 
     }
 }
