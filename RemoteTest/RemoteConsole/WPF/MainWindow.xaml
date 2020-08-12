@@ -1,0 +1,51 @@
+﻿<Window x:Class="WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF"
+        mc:Ignorable="d"
+        Title="SAPELITTE" Height="600" Width="600">
+    <Grid VerticalAlignment="Top" Height="500" Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" x:Name ="scrollviewer">
+            <DataGrid x:Name="InfillCases" VerticalAlignment="Top">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Case Name" Width="1*"/>
+                    <DataGridTextColumn Header="Status" Width="1*"/>
+                    <DataGridTextColumn Header="Action" Width="1*"/>
+                    <DataGridTextColumn Header="Location" Width="1*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Content="RUN SELECTED LOAD CASE ON:"/>
+                <ComboBox Grid.Row="1" Margin="10" />
+                <Button Grid.Row="2" x:Name ="confirmbutton" Background="White"  Content ="ASSIGN" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="Confirmbutton_Click"/>
+                <Button Grid.Row="3" x:Name ="DoNotRunButton" Background="White"  Content ="Do Not Run Selected" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="DoNotRunButton_Click"/>
+            </Grid>
+
+            <Button Grid.Row="5" x:Name ="RunAnalysis" Background="White"  Content ="RUN ANALYSIS" Height="20" VerticalAlignment="Bottom" Margin ="10 10 10 10" Click="RunAnalysis_Click"/>
+
+
+        </Grid>
+    </Grid>
+</Window>
