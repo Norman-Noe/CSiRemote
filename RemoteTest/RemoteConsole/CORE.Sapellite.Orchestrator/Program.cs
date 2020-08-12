@@ -115,12 +115,19 @@ namespace CORE.Sapellite.Orchestrator
             if (id.Role == MsgNames.ServerRole)
             {
                 SapelliteServers.Add(newConnection);
+                //Console.WriteLine($"New {id.Role} connected: {id.UserName}");
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine($"New {id.Role} connected:");
+                builder.AppendLine($"User:    {id.UserName}");
+                builder.AppendLine($"IP:      {id.IpAdress}");
+                builder.AppendLine($"Ports:   {string.Join(",", id.Ports)}");
+                builder.AppendLine($"Machine: {id.MachineName}");
+                Console.WriteLine(builder.ToString());
             }
             else if (id.Role == MsgNames.ClientRole)
             {
                 SapelliteClients.Add(newConnection);
             }
-            Console.WriteLine($"New {id.Role} connected: {id.UserName}");
         }
 
 

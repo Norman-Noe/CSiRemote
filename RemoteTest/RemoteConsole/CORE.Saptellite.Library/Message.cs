@@ -44,6 +44,10 @@ namespace CORE.Saptellite.Library
 
         public string UserName { get; set; }
 
-        public int[] Ports { get; set; }
+        public string IpAdress { get; set; }
+
+        public string MachineName { get; set; }
+
+        public List<int> Ports { get; set; }
     }
 }
