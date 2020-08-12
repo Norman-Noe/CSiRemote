@@ -169,13 +169,15 @@ namespace CORE.Sapellite.Server
             var numInstances = GetNumberOfDesiredInstances();
             var sapInstances = StartSapInstances(numInstances);
             Program.SapProcesses.AddRange(sapInstances);
-            
-            //return;
 
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            //return;
+            string configIp = Connection.ConnectAddress;
+            IPAddress ip = IPAddress.Parse(configIp);
+
+            //IPAddress ip = IPAddress.Parse("127.0.0.1");
             //IPAddress ip = IPAddress.Parse("10.1.12.126");
 
-            int port = 5000;
+            int port = Connection.Port;
             TcpClient client = new TcpClient();
             //client.
             try
@@ -190,7 +192,7 @@ namespace CORE.Sapellite.Server
                 return;
             }
             //client.Connect()
-            Console.WriteLine("client connected!!");
+            Console.WriteLine("Successfully connected to orchestrator.");
             NetworkStream ns = client.GetStream();
             Thread thread = new Thread(o => ReceiveData((TcpClient)o));
 
@@ -240,19 +242,7 @@ namespace CORE.Sapellite.Server
             }
         }
 
-        //https://stackoverflow.com/questions/6803073/get-local-ip-address
-        public static string GetLocalIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
+
 
         private static void HandleRequestIdentification(TcpClient client)
         {
@@ -264,7 +254,7 @@ namespace CORE.Sapellite.Server
                 Role = MsgNames.ServerRole,
                 Ports = activePorts,
                 MachineName = Environment.MachineName,
-                IpAdress = GetLocalIPAddress()
+                IpAdress = Utils.GetLocalIPAddress()
             };
 
             JsonConvert.SerializeObject(response);

@@ -11,6 +11,10 @@ namespace CORE.Saptellite.Library
     {
         public const string RequestIdentification = "RequestIdentification";
         public const string ResponseIdentification = "ResponseIdentification";
+
+        public const string RequestServerInfo = "RequestServerInfo";
+        public const string ResponseServerInfo = "ResponseServerInfo";
+        
         public const string ClientRole = "Client";
         public const string ServerRole = "Server";
 
@@ -37,7 +41,23 @@ namespace CORE.Saptellite.Library
         /// </summary>
         public string Content { get; set; }
     }
-    
+
+    public class ResponseServerInfo
+    {
+        public ResponseServerInfo()
+        {
+            this.SapEndpoints = new List<SapEndpoint>();
+        }
+        public List<SapEndpoint> SapEndpoints { get; set; }
+    }
+
+    public class SapEndpoint
+    {
+        public string Machine { get; set; }
+        public int Port { get; set; }
+
+    }
+
     public class ResponseIdentification
     {
         public string Role { get; set; }

@@ -105,11 +105,40 @@ namespace CORE.Sapellite.Orchestrator
                 case MsgNames.ResponseIdentification:
                     HandleResponseIdentification(client, msg);
                     break;
+                case MsgNames.RequestServerInfo:
+                    HandleRequestServerInfo(client);
+                    break;
                 default:
                     break;
             }
         }
-        
+
+        private static void HandleRequestServerInfo(TcpClient client)
+        {
+            ResponseServerInfo info = new ResponseServerInfo();
+            
+            foreach (var sap in Program.SapelliteServers.Select(ss => ss.ResponseIdentification))
+            {
+                foreach (var port in sap.Ports)
+                {
+                    SapEndpoint ep = new SapEndpoint()
+                    {
+                        Machine = sap.MachineName,
+                        Port = port
+                    };
+                    info.SapEndpoints.Add(ep);
+                }
+            }
+
+            TcpMessage msg = new TcpMessage(MsgNames.ResponseServerInfo);
+            msg.Content = JsonConvert.SerializeObject(info);
+
+            broadcast(client, msg);
+
+
+            //throw new NotImplementedException();
+        }
+
         private static void HandleResponseIdentification(TcpClient client, TcpMessage msg)
         {
             var id = JsonConvert.DeserializeObject<ResponseIdentification>(msg.Content);
@@ -130,13 +159,19 @@ namespace CORE.Sapellite.Orchestrator
             else if (id.Role == MsgNames.ClientRole)
             {
                 SapelliteClients.Add(newConnection);
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine($"New {id.Role} connected:");
+                builder.AppendLine($"User:    {id.UserName}");
+                builder.AppendLine($"IP:      {id.IpAdress}");
+                //builder.AppendLine($"Ports:   {string.Join(",", id.Ports)}");
+                builder.AppendLine($"Machine: {id.MachineName}");
+                Console.WriteLine(builder.ToString());
             }
         }
 
 
         public static void broadcast(TcpClient client, TcpMessage data)
         {
-
             var json = JsonConvert.SerializeObject(data);
 
             byte[] buffer = Encoding.ASCII.GetBytes(json);//data + Environment.NewLine);
