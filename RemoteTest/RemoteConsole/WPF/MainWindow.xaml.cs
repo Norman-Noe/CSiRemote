@@ -26,9 +26,12 @@ namespace WPF
         public cHelper HelperClient { get; set; }
         public cSapModel SapModelClient { get; set; }
 
+        private SapellitePipeline _sapellitePipeline;
+
         public MainWindow()
         {
             InitializeComponent();
+            _sapellitePipeline = new SapellitePipeline();
 
             //Current SAP22 load cases
             List<LoadCase> LoadCases = GetCurrentLoadCases();
