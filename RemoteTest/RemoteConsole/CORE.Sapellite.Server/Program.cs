@@ -28,6 +28,7 @@ namespace CORE.Sapellite.Server
 
         public void Kill()
         {
+            Console.WriteLine($"Killing process on port {this.Port}");
             this.Process.Kill();
         }
     }
@@ -80,7 +81,7 @@ namespace CORE.Sapellite.Server
 
         static bool ConsoleEventCallback(int eventType)
         {
-            if (eventType == 2)
+            if (eventType == 2 || eventType == 0)
             {
                 Console.WriteLine("Closing down SAP instances");
                 foreach (SapProcess process in Program.SapProcesses)
@@ -88,7 +89,14 @@ namespace CORE.Sapellite.Server
                     process.Kill();
                 }
                 Utils.RequestDisconnection(client, MsgNames.ServerRole);
+
+                //NetworkStream ns = client.GetStream();
+                //client.Client.Shutdown(SocketShutdown.Send);
+                //thread.Join();
+                //ns.Close();
                 client?.Close();
+                //Console.WriteLine("disconnect from server!!");
+                //Console.ReadKey();
             }
 
             return false;
@@ -133,6 +141,7 @@ namespace CORE.Sapellite.Server
         }
 
         static TcpClient client;
+        static Thread thread;
 
         public static int GetAvailablePort(int startingPort)
         {
@@ -199,23 +208,35 @@ namespace CORE.Sapellite.Server
             //client.Connect()
             Console.WriteLine("Successfully connected to orchestrator.");
             NetworkStream ns = client.GetStream();
-            Thread thread = new Thread(o => ReceiveData((TcpClient)o));
+            thread = new Thread(o => ReceiveData((TcpClient)o));
 
             thread.Start(client);
 
+            
             string s;
-            while (!string.IsNullOrEmpty((s = Console.ReadLine())))
+            while (true)
             {
-                byte[] buffer = Encoding.ASCII.GetBytes(s);
-                ns.Write(buffer, 0, buffer.Length);
+                s = Console.ReadLine();
+                Console.WriteLine($"Echo: {s}");
+                if(string.IsNullOrEmpty(s))
+                {
+                    break;
+                }
+                //byte[] buffer = Encoding.ASCII.GetBytes(s);
+                //ns.Write(buffer, 0, buffer.Length);
             }
+            
+            //thread.Join();
 
-            client.Client.Shutdown(SocketShutdown.Send);
-            thread.Join();
-            ns.Close();
-            client.Close();
-            Console.WriteLine("disconnect from server!!");
-            Console.ReadKey();
+            //client.Client.Shutdown(SocketShutdown.Send);
+            ConsoleEventCallback(0);
+            Thread.Sleep(500);
+            //thread.Abort();
+
+            //ns.Close();
+            //client.Close();
+            //Console.WriteLine("disconnect from server!!");
+            //Console.ReadKey();
         }
 
         static void ReceiveData(TcpClient client)

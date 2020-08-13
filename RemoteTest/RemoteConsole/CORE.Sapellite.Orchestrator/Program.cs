@@ -48,7 +48,7 @@ namespace CORE.Sapellite.Orchestrator
             {
                 TcpClient client = ServerSocket.AcceptTcpClient();
                 lock (_lock) list_clients.Add(count, client);
-                Console.WriteLine("Someone connected!!");
+                //Console.WriteLine("Someone connected!!");
 
                 Thread t = new Thread(handle_clients);
                 t.Start(count);
@@ -74,24 +74,28 @@ namespace CORE.Sapellite.Orchestrator
 
             while (true)
             {
-                NetworkStream stream = client.GetStream();
-                byte[] buffer = new byte[1024];
-                //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                
-                int byte_count = stream.Read(buffer, 0, buffer.Length);
-
-                if (byte_count == 0)
+                try
                 {
-                    break;
+                    NetworkStream stream = client.GetStream();
+                    byte[] buffer = new byte[1024];
+
+                    int byte_count = stream.Read(buffer, 0, buffer.Length);
+                    if (byte_count == 0)
+                    {
+                        break;
+                    }
+                    string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
+                    TcpMessage msg = JsonConvert.DeserializeObject<TcpMessage>(data);
+                    HandleServerMessage(client, msg);
+                }
+                catch (Exception e)
+                {
+                    client.Close();
+                    Console.WriteLine(e.Message);
+                    //throw e;
                 }
 
-                string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
 
-                TcpMessage msg = JsonConvert.DeserializeObject<TcpMessage>(data);
-
-                HandleServerMessage(client, msg);
-                //broadcast(data);
-                //Console.WriteLine(data);
             }
 
             lock (_lock) list_clients.Remove(id);
@@ -126,6 +130,7 @@ namespace CORE.Sapellite.Orchestrator
                 SapelliteTcpClient node = Program.SapelliteClients.Where(sc => sc.ResponseIdentification.MachineName == req.MachineName).FirstOrDefault();
                 if(node != null)
                 {
+                    Console.WriteLine($"Client {node.ResponseIdentification.MachineName} disconnected.");
                     Program.SapelliteClients.Remove(node);
                 }
             }
@@ -134,6 +139,7 @@ namespace CORE.Sapellite.Orchestrator
                 SapelliteTcpClient node = Program.SapelliteServers.Where(sc => sc.ResponseIdentification.MachineName == req.MachineName).FirstOrDefault();
                 if (node != null)
                 {
+                    Console.WriteLine($"Server {node.ResponseIdentification.MachineName} disconnected.");
                     Program.SapelliteServers.Remove(node);
                 }
             }
