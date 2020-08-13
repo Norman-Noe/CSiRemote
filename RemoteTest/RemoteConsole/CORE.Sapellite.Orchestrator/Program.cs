@@ -130,7 +130,7 @@ namespace CORE.Sapellite.Orchestrator
                 SapelliteTcpClient node = Program.SapelliteClients.Where(sc => sc.ResponseIdentification.MachineName == req.MachineName).FirstOrDefault();
                 if(node != null)
                 {
-                    Console.WriteLine($"Client {node.ResponseIdentification.MachineName} disconnected.");
+                    Console.WriteLine($"Client {node.ResponseIdentification.MachineName} disconnected.\n");
                     Program.SapelliteClients.Remove(node);
                 }
             }
@@ -139,7 +139,7 @@ namespace CORE.Sapellite.Orchestrator
                 SapelliteTcpClient node = Program.SapelliteServers.Where(sc => sc.ResponseIdentification.MachineName == req.MachineName).FirstOrDefault();
                 if (node != null)
                 {
-                    Console.WriteLine($"Server {node.ResponseIdentification.MachineName} disconnected.");
+                    Console.WriteLine($"Server {node.ResponseIdentification.MachineName} disconnected.\n");
                     Program.SapelliteServers.Remove(node);
                 }
             }
