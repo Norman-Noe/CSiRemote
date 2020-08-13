@@ -141,11 +141,16 @@ namespace WPF
             string filename = SapModelClient.GetModelFilename(false);
             string guid = Guid.NewGuid().ToString();
             string appendedfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
+            string appendedserverfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\SERVER_MODELS\" + guid;
             //string appendedfilepath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
             System.IO.Directory.CreateDirectory(appendedfilepath);
-            
+            System.IO.Directory.CreateDirectory(appendedserverfilepath);
+
             string newname = filename.Insert(filename.Length - 4, "_" + guid);
             string newfilename = System.IO.Path.Combine(appendedfilepath, newname);
+            string serverfilename = System.IO.Path.Combine(appendedserverfilepath, newname);
+
+
             System.IO.File.Copy(initialfilepath, newfilename);
 
             //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
@@ -189,7 +194,7 @@ namespace WPF
                     SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
 
                     AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
-                    ap.RunProcess(group.ToList(), newfilename, newname, false);
+                    ap.RunProcess(group.ToList(), newfilename, newname, serverfilename, false);
                 }             
             }
 

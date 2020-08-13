@@ -23,7 +23,7 @@ namespace WPF
         /// Process to run for each sapobject thats connected
         /// </summary>
         /// <returns></returns>
-        public void RunProcess(List<LoadCase> lcs, string newfilename, string currentfilename, bool current)
+        public void RunProcess(List<LoadCase> lcs, string newfilename, string currentfilename, string serverfilename, bool current)
         {
             //wrap in a try catch and return false on catch
             //Use all 8 cores on each machine
@@ -60,8 +60,7 @@ namespace WPF
             ret = _SapModelServer.Analyze.RunAnalysis();
 
             //Merge to original
-            ret = _SapModelServer.File.OpenFile(newfilename);
-            ret = _SapModelServer.Analyze.MergeAnalysisResults(newlocalfilename);
+            ret = _SapModelServer.File.Save(serverfilename);    
              
             //Exit SAP
             if (!current)
