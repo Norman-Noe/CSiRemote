@@ -67,6 +67,8 @@ namespace WPF
 
         public void ShutDown()
         {
+            Utils.RequestDisconnection(client, MsgNames.ClientRole);
+
             NetworkStream ns = client.GetStream();
             client.Client.Shutdown(SocketShutdown.Send);
             thread.Join();

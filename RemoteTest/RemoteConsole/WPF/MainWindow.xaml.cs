@@ -32,6 +32,7 @@ namespace WPF
         {
             InitializeComponent();
             _sapellitePipeline = new SapellitePipeline();
+            this.Closing += MainWindow_Closing;
 
             //Current SAP22 load cases
             List<LoadCase> LoadCases = GetCurrentLoadCases();
@@ -49,6 +50,12 @@ namespace WPF
             //MachineLocation.Items.Add("Client");
             //MachineLocation.Items.Add(ml1.ToString());
             //MachineLocation.Items.Add(ml2.ToString());
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this._sapellitePipeline.ShutDown();
+            //throw new NotImplementedException();
         }
 
         //Can move this somewhere else
