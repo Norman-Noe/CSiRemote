@@ -1,0 +1,126 @@
+
+
+ SAP2000 v22.1.0 Ultimate 64-bit (Analysis Build 9798/64)                       
+ File: C:\Users\nnoe\Documents...RemoteTest\SAPMODEL\HANGAR\source\01\5.9.18.OUT
+                                                                     
+                                                                       
+
+ D I S P L A C E M E N T   D E G R E E S   O F   F R E E D O M
+
+         (A) = Active DOF, equilibrium equation
+         (-) = Restrained DOF, reaction computed
+         (+) = Constrained DOF
+         (>) = External substructure DOF
+         ( ) = Null DOF
+
+  JOINTS              UX  UY  UZ  RX  RY  RZ
+       1               -   -   -   A   A   A
+       2 TO      22    A   A   A   A   A   A
+      23               -   -   -   A   A   A
+      24 TO     369    A   A   A   A   A   A
+     372 TO      27    -   -   -   A   A   A
+      31 TO      70    A   A   A   A   A   A
+      71 TO      73    -   -   -   A   A   A
+      74 TO     126    A   A   A   A   A   A
+     127 TO     128    -   -   -   A   A   A
+     129 TO     158    A   A   A   A   A   A
+     159 TO     160    -   -   -   A   A   A
+     161 TO     190    A   A   A   A   A   A
+     191 TO     192    -   -   -   A   A   A
+     193 TO     222    A   A   A   A   A   A
+     223 TO     224    -   -   -   A   A   A
+     225 TO     254    A   A   A   A   A   A
+     255 TO     256    -   -   -   A   A   A
+     257 TO     402    A   A   A   A   A   A
+     403               -   -   -   A   A   A
+     405 TO     468    A   A   A   A   A   A
+     469               -   -   -   A   A   A
+     471 TO     500    A   A   A   A   A   A
+     501               -   -   -   A   A   A
+     503 TO     532    A   A   A   A   A   A
+     533               -   -   -   A   A   A
+     535 TO     283    A   A   A   A   A   A
+     376 TO     408    -   -   -   A   A   A
+     409 TO     847    A   A   A   A   A   A
+     852 TO     863    -   -   -   A   A   A
+       3 TO     865    A   A   A   A   A   A
+     866 TO     867    -   -   -   A   A   A
+     868 TO     888    A   A   A   A   A   A
+     889 TO     892    -   -   -   A   A   A
+     893 TO     247    A   A   A   A   A   A
+     248 TO     282    A   A   A            
+     284               A   A   A   A   A   A
+     546 TO     549    A   A   A            
+     550 TO     849    A   A   A   A   A   A
+
+
+ SAP2000 v22.1.0 Ultimate 64-bit (Analysis Build 9798/64)                       
+ File: C:\Users\nnoe\Documents...RemoteTest\SAPMODEL\HANGAR\source\02\5.9.18.OUT
+                                                                     
+                                                                       
+
+
+ SAP2000 v22.1.0 Ultimate 64-bit (Analysis Build 9798/64)                       
+ File: C:\Users\nnoe\Documents...RemoteTest\SAPMODEL\HANGAR\source\04\5.9.18.OUT
+                                                                     
+                                                                       
+
+
+ SAP2000 v22.1.0 Ultimate 64-bit (Analysis Build 9798/64)                       
+ File: C:\Users\nnoe\Documents...RemoteTest\SAPMODEL\HANGAR\source\03\5.9.18.OUT
+                                                                     
+                                                                       
+
+
+ SAP2000 v22.1.0 Ultimate 64-bit (Analysis Build 9798/64)                       
+ File: C:\Users\nnoe\Documents...RemoteTest\SAPMODEL\HANGAR\source\02\5.9.18.OUT
+                                                                     
+                                                                       
+
+ D I S P L A C E M E N T   D E G R E E S   O F   F R E E D O M
+
+         (A) = Active DOF, equilibrium equation
+         (-) = Restrained DOF, reaction computed
+         (+) = Constrained DOF
+         (>) = External substructure DOF
+         ( ) = Null DOF
+
+  JOINTS              UX  UY  UZ  RX  RY  RZ
+       1               -   -   -   A   A   A
+       2 TO      22    A   A   A   A   A   A
+      23               -   -   -   A   A   A
+      24 TO     369    A   A   A   A   A   A
+     372 TO      27    -   -   -   A   A   A
+      31 TO      70    A   A   A   A   A   A
+      71 TO      73    -   -   -   A   A   A
+      74 TO     126    A   A   A   A   A   A
+     127 TO     128    -   -   -   A   A   A
+     129 TO     158    A   A   A   A   A   A
+     159 TO     160    -   -   -   A   A   A
+     161 TO     190    A   A   A   A   A   A
+     191 TO     192    -   -   -   A   A   A
+     193 TO     222    A   A   A   A   A   A
+     223 TO     224    -   -   -   A   A   A
+     225 TO     254    A   A   A   A   A   A
+     255 TO     256    -   -   -   A   A   A
+     257 TO     402    A   A   A   A   A   A
+     403               -   -   -   A   A   A
+     405 TO     468    A   A   A   A   A   A
+     469               -   -   -   A   A   A
+     471 TO     500    A   A   A   A   A   A
+     501               -   -   -   A   A   A
+     503 TO     532    A   A   A   A   A   A
+     533               -   -   -   A   A   A
+     535 TO     283    A   A   A   A   A   A
+     376 TO     408    -   -   -   A   A   A
+     409 TO     847    A   A   A   A   A   A
+     852 TO     863    -   -   -   A   A   A
+       3 TO     865    A   A   A   A   A   A
+     866 TO     867    -   -   -   A   A   A
+     868 TO     888    A   A   A   A   A   A
+     889 TO     892    -   -   -   A   A   A
+     893 TO     247    A   A   A   A   A   A
+     248 TO     282    A   A   A            
+     284               A   A   A   A   A   A
+     546 TO     549    A   A   A            
+     550 TO     849    A   A   A   A   A   A

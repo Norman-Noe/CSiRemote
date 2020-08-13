@@ -40,8 +40,8 @@ namespace WPF
             }
 
             //Get Potential machine locations here?
-            MachineLocation ml1 = new MachineLocation("IL1M113", 11650);
-            MachineLocation ml2 = new MachineLocation("IL1M113", 49150);
+            MachineLocation ml1 = new MachineLocation("IL1W015", 11650);
+            MachineLocation ml2 = new MachineLocation("IL1W015", 49150);
 
             MachineLocation.Items.Add("Client");
             MachineLocation.Items.Add(ml1.ToString());
@@ -136,6 +136,8 @@ namespace WPF
             string newfilename = System.IO.Path.Combine(appendedfilepath, filename);
             System.IO.File.Copy(initialfilepath, newfilename);
 
+            string newname = filename.Insert(filename.Length - 4, "_" + guid);
+
             //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
             List<LoadCase> groupeduploadcases = new List<LoadCase>();
             foreach (LoadCase lc in InfillCases.Items)
@@ -152,12 +154,12 @@ namespace WPF
                 {
                     //Retrieves current instance of SAP on CLIENT Computer
 
-                    cOAPI SapObjectServer = null;
-                    cHelper HelperServer = new Helper();
-                    SapObjectServer = HelperServer.GetObject("CSI.SAP2000.API.SapObject");
+                    //cOAPI SapObjectServer = null;
+                    //cHelper HelperServer = new Helper();
+                    //SapObjectServer = HelperServer.GetObject("CSI.SAP2000.API.SapObject");
 
-                    AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
-                    ap.RunProcess(group.ToList(), newfilename, filename, true);
+                    //AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
+                    //ap.RunProcess(group.ToList(), newfilename, newname, true);
                 }
                 else
                 {
@@ -177,7 +179,7 @@ namespace WPF
                     SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
 
                     AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
-                    ap.RunProcess(group.ToList(), newfilename, filename, false);
+                    ap.RunProcess(group.ToList(), newfilename, newname, false);
                 }             
             }
 
