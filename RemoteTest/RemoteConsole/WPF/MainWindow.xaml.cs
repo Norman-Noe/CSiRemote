@@ -199,7 +199,7 @@ namespace WPF
         //EMIL DO STUFF HERE!
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            MachineLocation.Items.Refresh();
+            MachineLocation.Items.Clear();
 
             var machines = this._sapellitePipeline.GetAvailableMachines();
             foreach (var machine in machines)
