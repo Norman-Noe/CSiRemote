@@ -14,7 +14,7 @@ namespace WPF
 
         public AnalysisProcess(cOAPI SapObjectServer)
         {
-
+            _SapObjectServer = SapObjectServer;
             _SapModelServer = SapObjectServer.SapModel;
         }
 
@@ -33,7 +33,9 @@ namespace WPF
                 _SapObjectServer.ApplicationStart(eUnits.kip_in_F, true, newfilename);
 
                 //Save locally somewhere
-                string newlocalfilename = System.IO.Path.Combine(@"Documents\", currentfilename);
+                string appdataloc = @"\Computers and Structures\CORE\SAPELLITE\" + currentfilename;
+                string appdataloc2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string newlocalfilename = appdataloc2 + appdataloc;
                 int ret = _SapModelServer.File.Save(newlocalfilename);
             }           
 
@@ -51,12 +53,13 @@ namespace WPF
             int numcores = 0;
             string stiffcase = "";
 
-            _SapModelServer.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
-            _SapModelServer.Analyze.SetSolverOption_2(type, 2, 8);
-            _SapModelServer.Analyze.RunAnalysis();
+            int ret2 = _SapModelServer.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
+            ret2 =  _SapModelServer.Analyze.SetSolverOption_2(type, 2, 8);
+            ret2 = _SapModelServer.Analyze.RunAnalysis();
 
             //Merge to original
-            _SapModelServer.Analyze.MergeAnalysisResults(newfilename);
+            ret2 = _SapModelServer.File.OpenFile(currentfilename);
+            ret2 = _SapModelServer.Analyze.MergeAnalysisResults(newfilename);
 
             //Exit SAP
             if (!current)
@@ -64,6 +67,5 @@ namespace WPF
                 _SapObjectServer.ApplicationExit(false);
             }
         }
-
     }
 }

@@ -1,0 +1,54 @@
+  RespType: Case     ,  File: .Y0003!,  Records:                     0
+                  1072
+  RespType: Case     ,  File: .Y0002!,  Records:                     0
+                  1020
+  RespType: Case     ,  File: .Y0004!,  Records:                     0
+                  1436
+  RespType: Displ    ,  File: .Y0001!,  Records:                     0
+               1710288
+  RespType: Displ    ,  File: .Y0102!,  Records:                     0
+                462240
+  RespType: Displ    ,  File: .Y0103!,  Records:                     0
+                 46224
+  RespType: Displ    ,  File: .Y0104!,  Records:                     0
+                 46224
+  RespType: React    ,  File: .Y0301!,  Records:                     0
+               1710288
+  RespType: React    ,  File: .Y0302!,  Records:                     0
+                462240
+  RespType: React    ,  File: .Y0303!,  Records:                     0
+                 46224
+  RespType: React    ,  File: .Y0304!,  Records:                     0
+                 46224
+  RespType: Frame    ,  File: .Y0503!,  Records:                     0
+                712704
+  RespType: Frame    ,  File: .Y0502!,  Records:                     0
+                707832
+  RespType: Frame    ,  File: .Y0504!,  Records:                     0
+                731028
+  RespType: Spring   ,  File: .Y0203!,  Records:                     0
+                 11556
+  RespType: Spring   ,  File: .Y0202!,  Records:                     0
+                 11556
+  RespType: Spring   ,  File: .Y0204!,  Records:                     0
+                 11556
+  RespType: JFJoint  ,  File: .Y0101!,  Records:                     0
+               1710288
+  RespType: JFJoint  ,  File: .Y0702!,  Records:                     0
+                416016
+  RespType: JFSpring ,  File: .Y0201!,  Records:                     0
+               1710288
+  RespType: JFSpring ,  File: .Y0802!,  Records:                     0
+                416016
+  RespType: StrainAge,  File: .Y0403!,  Records:                     0
+                 37120
+  RespType: StrainAge,  File: .Y0402!,  Records:                     0
+                 37120
+  RespType: StrainAge,  File: .Y0404!,  Records:                     0
+                 37120
+  StateType: Frame    ,  File: .Y0603!,  Records:                     0
+               1067200
+  StateType: Frame    ,  File: .Y0602!,  Records:                     0
+               1067200
+  StateType: Frame    ,  File: .Y0604!,  Records:                     0
+               1067200
