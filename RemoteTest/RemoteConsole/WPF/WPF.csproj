@@ -104,5 +104,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CORE.Saptellite.Library\CORE.Saptellite.Library.csproj">
+      <Project>{23d29875-76d3-4755-9a3c-9dfd9100008d}</Project>
+      <Name>CORE.Saptellite.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
