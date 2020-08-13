@@ -26,17 +26,26 @@ namespace WPF
         public void RunProcess(List<LoadCase> lcs, string newfilename, string currentfilename, bool current)
         {
             //wrap in a try catch and return false on catch
+            //Use all 8 cores on each machine
+            int type = 0;
+            int proctype = 0;
+            int numcores = 0;
+            string stiffcase = "";
+            int ret = 0;
 
             //openfile
             if (!current)
             {
                 _SapObjectServer.ApplicationStart(eUnits.kip_in_F, true, newfilename);
 
+                ret = _SapModelServer.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
+                ret = _SapModelServer.Analyze.SetSolverOption_2(type, 2, 8);
+
                 //Save locally somewhere
                 string appdataloc = @"\Computers and Structures\CORE\SAPELLITE\" + currentfilename;
                 string appdataloc2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 string newlocalfilename = appdataloc2 + appdataloc;
-                int ret = _SapModelServer.File.Save(newlocalfilename);
+                ret = _SapModelServer.File.Save(newlocalfilename);
             }           
 
             //Set all load cases to false
@@ -45,21 +54,13 @@ namespace WPF
             foreach (LoadCase lc in lcs)
             {
                 _SapModelServer.Analyze.SetRunCaseFlag(lc._name, true);
-            }
-
-            //Use all 8 cores on each machine
-            int type = 0;
-            int proctype = 0;
-            int numcores = 0;
-            string stiffcase = "";
-
-            int ret2 = _SapModelServer.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
-            ret2 =  _SapModelServer.Analyze.SetSolverOption_2(type, 2, 8);
-            ret2 = _SapModelServer.Analyze.RunAnalysis();
+            }           
+            
+            ret = _SapModelServer.Analyze.RunAnalysis();
 
             //Merge to original
-            ret2 = _SapModelServer.File.OpenFile(currentfilename);
-            ret2 = _SapModelServer.Analyze.MergeAnalysisResults(newfilename);
+            ret = _SapModelServer.File.OpenFile(currentfilename);
+            ret = _SapModelServer.Analyze.MergeAnalysisResults(newfilename);
 
             //Exit SAP
             if (!current)
