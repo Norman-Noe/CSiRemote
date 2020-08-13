@@ -87,7 +87,10 @@ namespace CORE.Sapellite.Server
                 {
                     process.Kill();
                 }
+                Utils.RequestDisconnection(client, MsgNames.ServerRole);
+                client?.Close();
             }
+
             return false;
         }
 
@@ -128,6 +131,8 @@ namespace CORE.Sapellite.Server
             //* Do your stuff with the output (write to console/log/StringBuilder)
             Console.WriteLine(outLine.Data);
         }
+
+        static TcpClient client;
 
         public static int GetAvailablePort(int startingPort)
         {
@@ -178,7 +183,7 @@ namespace CORE.Sapellite.Server
             //IPAddress ip = IPAddress.Parse("10.1.12.126");
 
             int port = Connection.Port;
-            TcpClient client = new TcpClient();
+            client = new TcpClient();
             //client.
             try
             {

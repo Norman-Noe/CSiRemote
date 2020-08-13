@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,13 +15,34 @@ namespace CORE.Sapellite.Client
 {
     class Program
     {
+        static ConsoleEventDelegate handler;   // Keeps it from getting garbage collected
+                                               // Pinvoke
+        private delegate bool ConsoleEventDelegate(int eventType);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleCtrlHandler(ConsoleEventDelegate callback, bool add);
+
+        static bool ConsoleEventCallback(int eventType)
+        {
+            if (eventType == 2)
+            {
+                Utils.RequestDisconnection(client, MsgNames.ClientRole);
+                //Thread.Sleep(1000);
+                client?.Close();
+
+            }
+            return false;
+        }
+        static TcpClient client;
         static void Main(string[] args)
         {
+            handler = new ConsoleEventDelegate(ConsoleEventCallback);
+            SetConsoleCtrlHandler(handler, true);
 
             string configIp = Connection.ConnectAddress;
             IPAddress ip = IPAddress.Parse(configIp);
             int port = Connection.Port;
-            TcpClient client = new TcpClient();
+            client = new TcpClient();
 
             try
             {
@@ -125,19 +147,13 @@ namespace CORE.Sapellite.Client
                 Content = JsonConvert.SerializeObject(response)
             };
 
-            SendMessage(client, msg);
+            Utils.SendMessage(client, msg);
             //var json = JsonConvert.SerializeObject(msg);
             //NetworkStream ns = client.GetStream();
             //byte[] buffer = Encoding.ASCII.GetBytes(json);
             //ns.Write(buffer, 0, buffer.Length);
         }
 
-        private static void SendMessage(TcpClient client, TcpMessage msg)
-        {
-            var json = JsonConvert.SerializeObject(msg);
-            NetworkStream ns = client.GetStream();
-            byte[] buffer = Encoding.ASCII.GetBytes(json);
-            ns.Write(buffer, 0, buffer.Length);
-        }
+
     }
 }

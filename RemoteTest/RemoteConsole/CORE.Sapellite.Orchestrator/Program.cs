@@ -76,7 +76,8 @@ namespace CORE.Sapellite.Orchestrator
             {
                 NetworkStream stream = client.GetStream();
                 byte[] buffer = new byte[1024];
-
+                //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                
                 int byte_count = stream.Read(buffer, 0, buffer.Length);
 
                 if (byte_count == 0)
@@ -108,8 +109,33 @@ namespace CORE.Sapellite.Orchestrator
                 case MsgNames.RequestServerInfo:
                     HandleRequestServerInfo(client);
                     break;
+                case MsgNames.RequestDisconnection:
+                    HandleRequestDisconnection(client, msg);
+                    break;
                 default:
                     break;
+            }
+        }
+
+        private static void HandleRequestDisconnection(TcpClient client, TcpMessage msg)
+        {
+            RequestDisconnection req = JsonConvert.DeserializeObject<RequestDisconnection>(msg.Content);
+
+            if (req.Role == MsgNames.ClientRole)
+            {
+                SapelliteTcpClient node = Program.SapelliteClients.Where(sc => sc.ResponseIdentification.MachineName == req.MachineName).FirstOrDefault();
+                if(node != null)
+                {
+                    Program.SapelliteClients.Remove(node);
+                }
+            }
+            else if (req.Role == MsgNames.ServerRole)
+            {
+                SapelliteTcpClient node = Program.SapelliteServers.Where(sc => sc.ResponseIdentification.MachineName == req.MachineName).FirstOrDefault();
+                if (node != null)
+                {
+                    Program.SapelliteServers.Remove(node);
+                }
             }
         }
 
