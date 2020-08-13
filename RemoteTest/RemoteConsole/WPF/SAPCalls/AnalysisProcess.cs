@@ -33,6 +33,10 @@ namespace WPF
             string stiffcase = "";
             int ret = 0;
 
+            //Save locally somewhere
+            string appdataloc = @"\Computers and Structures\CORE\SAPELLITE\" + currentfilename;
+            string appdataloc2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string newlocalfilename = appdataloc2 + appdataloc;
             //openfile
             if (!current)
             {
@@ -41,10 +45,7 @@ namespace WPF
                 ret = _SapModelServer.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
                 ret = _SapModelServer.Analyze.SetSolverOption_2(type, 2, 8);
 
-                //Save locally somewhere
-                string appdataloc = @"\Computers and Structures\CORE\SAPELLITE\" + currentfilename;
-                string appdataloc2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string newlocalfilename = appdataloc2 + appdataloc;
+                
                 ret = _SapModelServer.File.Save(newlocalfilename);
             }           
 
@@ -59,9 +60,9 @@ namespace WPF
             ret = _SapModelServer.Analyze.RunAnalysis();
 
             //Merge to original
-            ret = _SapModelServer.File.OpenFile(currentfilename);
-            ret = _SapModelServer.Analyze.MergeAnalysisResults(newfilename);
-
+            ret = _SapModelServer.File.OpenFile(newfilename);
+            ret = _SapModelServer.Analyze.MergeAnalysisResults(newlocalfilename);
+             
             //Exit SAP
             if (!current)
             {
