@@ -56,10 +56,10 @@ namespace RemoteConsole
                   //IF I WANT TO RUN MULTIPLE INSTANCES ON THE SAME COMPUTER CAN I LOOK UP THE AVAILABLE TCP PORTS ON THAT COMPUTER?  
                   //HOW DOES THIS WORK?
 
-                  coapi = helper.CreateObjectProgIDHostPort("IL1M113", tpc[0], "CSI.SAP2000.API.SapObject");
-                  ret = coapi.ApplicationStart(eUnits.kip_ft_F);
-                  cSapModel SapModel = coapi.SapModel;
-                  ret = SapModel.InitializeNewModel();
+                  //coapi = helper.CreateObjectProgIDHostPort("IL1M113", tpc[0], "CSI.SAP2000.API.SapObject");
+                  //ret = coapi.ApplicationStart(eUnits.kip_ft_F);
+                  //cSapModel SapModel = coapi.SapModel;
+                  //ret = SapModel.InitializeNewModel();
 
                   //initialize model
               }
