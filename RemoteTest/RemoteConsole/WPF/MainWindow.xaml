@@ -40,7 +40,8 @@
                 <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Content="RUN SELECTED LOAD CASE ON:"/>
                 <ComboBox Grid.Row="1" Margin="10" x:Name="MachineLocation" />
                 <Button Grid.Row="2" x:Name ="confirmbutton" Background="White"  Content ="ASSIGN" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="Confirmbutton_Click"/>
-                <Button Grid.Row="3" x:Name ="DoNotRunButton" Background="White"  Content ="Do Not Run Selected" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="DoNotRunButton_Click"/>
+                <Button Grid.Row="3" x:Name ="Refresh" Background="White"  Content ="REFRESH" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="Refresh_Click"/>
+                <Button Grid.Row="4" x:Name ="DoNotRunButton" Background="White"  Content ="Do Not Run Selected" Height="20" VerticalAlignment="Top" Margin ="10 0 10 10" Click="DoNotRunButton_Click"/>
             </Grid>
 
             <Button Grid.Row="5" x:Name ="RunAnalysis" Background="White"  Content ="RUN ANALYSIS" Height="20" VerticalAlignment="Bottom" Margin ="10 10 10 10" Click="RunAnalysis_Click"/>

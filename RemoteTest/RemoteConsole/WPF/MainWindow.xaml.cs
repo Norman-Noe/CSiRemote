@@ -133,10 +133,10 @@ namespace WPF
             string appendedfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
             //string appendedfilepath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
             System.IO.Directory.CreateDirectory(appendedfilepath);
-            string newfilename = System.IO.Path.Combine(appendedfilepath, filename);
-            System.IO.File.Copy(initialfilepath, newfilename);
-
+            
             string newname = filename.Insert(filename.Length - 4, "_" + guid);
+            string newfilename = System.IO.Path.Combine(appendedfilepath, newname);
+            System.IO.File.Copy(initialfilepath, newfilename);
 
             //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
             List<LoadCase> groupeduploadcases = new List<LoadCase>();
@@ -190,6 +190,12 @@ namespace WPF
             SapModelClient.File.Save(initialfilepath);
 
             //Review Results.
+
+        }
+
+        //EMIL DO STUFF HERE!
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }
