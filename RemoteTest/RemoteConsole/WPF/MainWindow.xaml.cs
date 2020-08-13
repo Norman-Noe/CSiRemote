@@ -43,12 +43,12 @@ namespace WPF
             }
 
             //Get Potential machine locations here?
-            MachineLocation ml1 = new MachineLocation("IL1W015", 11650);
-            MachineLocation ml2 = new MachineLocation("IL1W015", 49150);
+            //MachineLocation ml1 = new MachineLocation("IL1W015", 11650);
+            //MachineLocation ml2 = new MachineLocation("IL1W015", 49150);
 
-            MachineLocation.Items.Add("Client");
-            MachineLocation.Items.Add(ml1.ToString());
-            MachineLocation.Items.Add(ml2.ToString());
+            //MachineLocation.Items.Add("Client");
+            //MachineLocation.Items.Add(ml1.ToString());
+            //MachineLocation.Items.Add(ml2.ToString());
         }
 
         //Can move this somewhere else
@@ -199,7 +199,13 @@ namespace WPF
         //EMIL DO STUFF HERE!
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
+            MachineLocation.Items.Refresh();
 
+            var machines = this._sapellitePipeline.GetAvailableMachines();
+            foreach (var machine in machines)
+            {
+                MachineLocation.Items.Add(machine);
+            }
         }
     }
 }
