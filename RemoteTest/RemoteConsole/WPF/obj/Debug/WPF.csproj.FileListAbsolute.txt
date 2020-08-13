@@ -2,7 +2,6 @@ C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\bin\Debug\
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\bin\Debug\WPF.exe
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\bin\Debug\WPF.pdb
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\bin\Debug\SAP2000v1.dll
-C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\WPF.csprojAssemblyReference.cache
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\MainWindow.g.cs
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\App.g.cs
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\WPF_MarkupCompile.cache
@@ -15,3 +14,4 @@ C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\WPF.csproj.CopyComplete
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\WPF.exe
 C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\WPF.pdb
+C:\Users\nnoe\Documents\GitHub\CSiRemote\RemoteTest\RemoteConsole\WPF\obj\Debug\WPF.csprojAssemblyReference.cache

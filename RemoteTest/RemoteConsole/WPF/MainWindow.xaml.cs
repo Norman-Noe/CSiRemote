@@ -21,6 +21,11 @@ namespace WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        public cOAPI SapObjectClient { get; set; }
+
+        public cHelper HelperClient { get; set; }
+        public cSapModel SapModelClient { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,13 +49,13 @@ namespace WPF
         }
 
         //Can move this somewhere else
-        public static List<LoadCase> GetCurrentLoadCases()
+        public List<LoadCase> GetCurrentLoadCases()
         {
             //Retrieve current instance
-            cOAPI SapObjectClient = null;
-            cHelper HelperClient = new Helper();
+            SapObjectClient = null;
+            HelperClient = new Helper();
             SapObjectClient = HelperClient.GetObject("CSI.SAP2000.API.SapObject");
-            cSapModel SapModelClient = SapObjectClient.SapModel;
+            SapModelClient = SapObjectClient.SapModel;
 
             int numberofitems = 0;
             string[] casenames = null;
@@ -122,10 +127,68 @@ namespace WPF
         private void RunAnalysis_Click(object sender, RoutedEventArgs e)
         {
             //save model on p drive
+            string initialfilepath = SapModelClient.GetModelFilename();
+            string filename = SapModelClient.GetModelFilename(false);
+            string guid = Guid.NewGuid().ToString();
+            string appendedfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
+            //string appendedfilepath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
+            System.IO.Directory.CreateDirectory(appendedfilepath);
+            string newfilename = System.IO.Path.Combine(appendedfilepath, filename);
+            System.IO.File.Copy(initialfilepath, newfilename);
 
-            //couple locations/ports togethor
+            //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
+            List<LoadCase> groupeduploadcases = new List<LoadCase>();
+            foreach (LoadCase lc in InfillCases.Items)
+            {
+                groupeduploadcases.Add(lc);
+            }
 
-            //
+            var newgroup = groupeduploadcases.GroupBy(x => x._location);
+
+            //Make this a parallel loop after reviewed
+            foreach(var group in newgroup)
+            {
+                if (group.Key == "Client")
+                {
+                    //Retrieves current instance of SAP on CLIENT Computer
+
+                    cOAPI SapObjectServer = null;
+                    cHelper HelperServer = new Helper();
+                    SapObjectServer = HelperServer.GetObject("CSI.SAP2000.API.SapObject");
+
+                    AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
+                    ap.RunProcess(group.ToList(), newfilename, filename, true);
+                }
+                else
+                {
+                    //Retrieves groups and ports on SERVER Computers
+
+                    //location and tcp port
+                    string location = group.First()._location;
+                    var splitchar = location.Split('[');
+                    string machinenumber = splitchar[0];
+                    string tcpportstr = splitchar[1].TrimEnd(']');
+                    int tcpport = System.Convert.ToInt32(tcpportstr);
+
+                    //start instance
+                    //send to a machine
+                    cOAPI SapObjectServer = null;
+                    cHelper HelperServer = new Helper();
+                    SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
+
+                    AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
+                    ap.RunProcess(group.ToList(), newfilename, filename, false);
+                }             
+            }
+
+            //Open up the merged version after all is completed:
+            SapModelClient.File.OpenFile(newfilename); // this could be a copy if opening on the pdrive takes forever
+
+            //Save back to initial filepath:
+            SapModelClient.File.Save(initialfilepath);
+
+            //Review Results.
+
         }
     }
 }
