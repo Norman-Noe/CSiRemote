@@ -26,9 +26,13 @@ namespace WPF
         public cHelper HelperClient { get; set; }
         public cSapModel SapModelClient { get; set; }
 
+        private SapellitePipeline _sapellitePipeline;
+
         public MainWindow()
         {
             InitializeComponent();
+            _sapellitePipeline = new SapellitePipeline();
+            this.Closing += MainWindow_Closing;
 
             //Current SAP22 load cases
             List<LoadCase> LoadCases = GetCurrentLoadCases();
@@ -40,12 +44,18 @@ namespace WPF
             }
 
             //Get Potential machine locations here?
-            MachineLocation ml1 = new MachineLocation("IL1W015", 11650);
-            MachineLocation ml2 = new MachineLocation("IL1W015", 49150);
+            //MachineLocation ml1 = new MachineLocation("IL1W015", 11650);
+            //MachineLocation ml2 = new MachineLocation("IL1W015", 49150);
 
-            MachineLocation.Items.Add("Client");
-            MachineLocation.Items.Add(ml1.ToString());
-            MachineLocation.Items.Add(ml2.ToString());
+            //MachineLocation.Items.Add("Client");
+            //MachineLocation.Items.Add(ml1.ToString());
+            //MachineLocation.Items.Add(ml2.ToString());
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this._sapellitePipeline.ShutDown();
+            //throw new NotImplementedException();
         }
 
         //Can move this somewhere else
@@ -196,7 +206,13 @@ namespace WPF
         //EMIL DO STUFF HERE!
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
+            MachineLocation.Items.Clear();
 
+            var machines = this._sapellitePipeline.GetAvailableMachines();
+            foreach (var machine in machines)
+            {
+                MachineLocation.Items.Add(machine);
+            }
         }
     }
 }
