@@ -187,7 +187,7 @@ namespace WPF
                     string machinenumber = loc._MachineNumber;
                     int tcpport = loc._Port;
                     
-                    string clientModelDirectory = basePath + @"\" + batchRunGuid + @"\" + loc._MachineNumber;
+                    string clientModelDirectory = basePath + @"\" + batchRunGuid + @"\" + loc._MachineNumber + $"_{loc._Port}";
 
                     System.IO.Directory.CreateDirectory(clientModelDirectory);
 
@@ -207,44 +207,14 @@ namespace WPF
                 }             
             }
 
+            //location of the analyzed model
+            //string pDriveClientFilename = modelsToMerge[0];
 
-            //Open the analyzed model on the client side.
-            //int ret = SapModelClient.File.OpenFile(pDriveClientFilename); // this could be a copy if opening on the pdrive takes forever
-
-            //open original
-            //ret = SapModelClient.File.OpenFile(originalFileFullPath); // this could be a copy if opening on the pdrive takes forever
-
-
-            //original is opened - let's save it
-
-            /*
-            int type = 0, proctype = 0, numcores = 0;
-            string stiffcase = "";
-            int ret = SapModelClient.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
-            ret = SapModelClient.Analyze.SetSolverOption_2(type, 2, 8);
-
-            ret = SapModelClient.File.Save(originalFileFullPath);
-            */
-
-            //merge.
-
-            //string temp = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\6685132b-63b4-4b04-a62e-6a83707ac16a\8.10.20_6685132b-63b4-4b04-a62e-6a83707ac16a.sdb";
-            //ret = SapModelClient.Analyze.MergeAnalysisResults(temp);
-
-            string pDriveClientFilename = modelsToMerge[0];
-
-            int ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
-
-
-
-
-            //Open up the merged version after all is completed:
-
-            //Save back to initial filepath:
-            //SapModelClient.File.Save(originalFileFullPath);
-
-            //Review Results.
-
+            //merge the results.
+            foreach (var pDriveClientFilename in modelsToMerge)
+            {
+                int ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
+            }
         }
 
         //EMIL DO STUFF HERE!
