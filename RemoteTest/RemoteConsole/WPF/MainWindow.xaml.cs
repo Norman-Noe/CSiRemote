@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -148,6 +149,10 @@ namespace WPF
         /// <param name="e"></param>
         private async void RunAnalysis_Click(object sender, RoutedEventArgs e)
         {
+            //string test = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\176d1db6-0dab-4724-b308-b7539f97de60\NY1W125_11653\8.10.20.sdb";
+            //CopyAnalysisResultsToClientMachine(test);
+            //return;
+
             //save model on p drive
             string originalFileFullPath = SapModelClient.GetModelFilename();
             string originalFileName = SapModelClient.GetModelFilename(false);
@@ -198,11 +203,18 @@ namespace WPF
             //Now wait for all of them to finish
             Task.WaitAll(analysisTasks.ToArray());
 
+            string localFolder = CopyAnalysisResultsToClientMachine(modelsToMerge.FirstOrDefault());
+
             //Merge the results back into the client model
             foreach (var pDriveClientFilename in modelsToMerge)
             {
-                int ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
+                string local = GetLocalMirrorName(pDriveClientFilename);
+
+                int ret = SapModelClient.Analyze.MergeAnalysisResults(local);
             }
+            DeleteLocalResults(localFolder);
+
+
         }
 
         //Creates the task which will run the analysis on the server.
@@ -235,6 +247,69 @@ namespace WPF
 
             });
             return t1;
+        }
+
+        private string GetLocalMirrorName(string pathToSapFile)
+        {
+            var appdataFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Computers and Structures\CORE\SAPELLITE");
+
+            //P:\_Corp\CORE\Public\9_Temp\SAPELLITE\176d1db6-0dab-4724-b308-b7539f97de60\NY1W125_11653\8.10.20.sdb
+
+            //NY1W125_11653
+            //string machineAndPort = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(pathToSapFile));
+            string fileName = System.IO.Path.GetFileName(pathToSapFile);
+
+            //P:\_Corp\CORE\Public\9_Temp\SAPELLITE\176d1db6-0dab-4724-b308-b7539f97de60\NY1W125_11653
+            string machineAndPort = Directory.GetParent(pathToSapFile).FullName;
+            //NY1W125_11653
+            machineAndPort = System.IO.Path.GetFileName(machineAndPort);
+
+            //P:\_Corp\CORE\Public\9_Temp\SAPELLITE\176d1db6-0dab-4724-b308-b7539f97de60
+            string batchFolder = Directory.GetParent(pathToSapFile).Parent.FullName;
+            //176d1db6-0dab-4724-b308-b7539f97de60
+            string guid = System.IO.Path.GetFileName(batchFolder);
+            
+            string fullLocalFolder = System.IO.Path.Combine(appdataFolder, guid, machineAndPort, fileName);
+            return fullLocalFolder;
+        }
+
+        private string CopyAnalysisResultsToClientMachine(string pathToSapFile)
+        {
+
+            //string fu
+            string fullLocalFolder = System.IO.Path.GetDirectoryName((GetLocalMirrorName(pathToSapFile)));
+            fullLocalFolder = System.IO.Directory.GetParent(fullLocalFolder).FullName;
+
+            string batchFolder = Directory.GetParent(pathToSapFile).Parent.FullName;
+            
+            Directory.CreateDirectory(fullLocalFolder);
+
+            CloneFolder(batchFolder, fullLocalFolder);
+
+            return fullLocalFolder;
+
+            //string localFilelocation = System.IO.Path.Combine(fullLocalFolder, );
+
+            //return new Tuple<string, string>(fullLocalFolder, "");
+        }
+
+        private void DeleteLocalResults(string s)
+        {
+            Directory.Delete(s, true);
+        }
+
+        private void CloneFolder(string SourcePath, string DestinationPath)
+        {
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(SourcePath, "*",
+                SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(SourcePath, "*.*",
+                SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath), true);
+
         }
 
         //EMIL DO STUFF HERE!
