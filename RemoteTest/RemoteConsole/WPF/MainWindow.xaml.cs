@@ -129,6 +129,18 @@ namespace WPF
             InfillCases.Items.Refresh();
         }
 
+        private MachineLocation ParseMachineInfo(string location)
+        {
+            //string location = group.First()._location;
+            var splitchar = location.Split('[');
+            string machinenumber = splitchar[0];
+            string tcpportstr = splitchar[1].TrimEnd(']');
+            int tcpport = System.Convert.ToInt32(tcpportstr);
+
+            return new MachineLocation(machinenumber, tcpport);
+
+        }
+
         /// <summary>
         /// Trigger Run Sequence
         /// </summary>
@@ -139,27 +151,8 @@ namespace WPF
             //save model on p drive
             string originalFileFullPath = SapModelClient.GetModelFilename();
             string originalFileName = SapModelClient.GetModelFilename(false);
-            string guid = Guid.NewGuid().ToString();
-
+            string batchRunGuid = Guid.NewGuid().ToString();
             var basePath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE";
-
-            string clientModelDirectory = basePath + @"\CLIENT_MODELS\" + guid;
-            string serverModelDirectory = basePath + @"\SERVER_MODELS\" + guid;
-
-
-            //string appendedfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
-            //string appendedserverfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\SERVER_MODELS\" + guid;
-            //string appendedfilepath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
-            System.IO.Directory.CreateDirectory(clientModelDirectory);
-            System.IO.Directory.CreateDirectory(serverModelDirectory);
-
-            string newFileNameWithGuid = originalFileName.Insert(originalFileName.Length - 4, "_" + guid);
-
-            string newfilename = System.IO.Path.Combine(clientModelDirectory, newFileNameWithGuid);
-            string serverfilename = System.IO.Path.Combine(serverModelDirectory, newFileNameWithGuid);
-
-
-            System.IO.File.Copy(originalFileFullPath, newfilename);
 
             //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
             List<LoadCase> groupeduploadcases = new List<LoadCase>();
@@ -171,6 +164,8 @@ namespace WPF
             var newgroup = groupeduploadcases.GroupBy(x => x._location);
 
             //Make this a parallel loop after reviewed
+            List<string> modelsToMerge = new List<string>();
+
             foreach(var group in newgroup)
             {
                 if (group.Key == "Client")
@@ -186,14 +181,19 @@ namespace WPF
                 }
                 else
                 {
-                    //Retrieves groups and ports on SERVER Computers
 
-                    //location and tcp port
                     string location = group.First()._location;
-                    var splitchar = location.Split('[');
-                    string machinenumber = splitchar[0];
-                    string tcpportstr = splitchar[1].TrimEnd(']');
-                    int tcpport = System.Convert.ToInt32(tcpportstr);
+                    MachineLocation loc = ParseMachineInfo(location);
+                    string machinenumber = loc._MachineNumber;
+                    int tcpport = loc._Port;
+                    
+                    string clientModelDirectory = basePath + @"\" + batchRunGuid + @"\" + loc._MachineNumber;
+
+                    System.IO.Directory.CreateDirectory(clientModelDirectory);
+
+                    string machineSpecificModelOnPdrive = System.IO.Path.Combine(clientModelDirectory, originalFileName);
+
+                    System.IO.File.Copy(originalFileFullPath, machineSpecificModelOnPdrive);
 
                     //start instance
                     //send to a machine
@@ -202,15 +202,40 @@ namespace WPF
                     SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
 
                     AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
-                    ap.RunProcess(group.ToList(), newfilename, newFileNameWithGuid, serverfilename, false);
+                    ap.RunProcess(group.ToList(), machineSpecificModelOnPdrive, false);
+                    modelsToMerge.Add(machineSpecificModelOnPdrive);
                 }             
             }
 
+
+            //Open the analyzed model on the client side.
+            //int ret = SapModelClient.File.OpenFile(pDriveClientFilename); // this could be a copy if opening on the pdrive takes forever
+
+            //open original
+            //ret = SapModelClient.File.OpenFile(originalFileFullPath); // this could be a copy if opening on the pdrive takes forever
+
+
+            //original is opened - let's save it
+            int type = 0, proctype = 0, numcores = 0;
+            string stiffcase = "";
+            int ret = SapModelClient.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
+            ret = SapModelClient.Analyze.SetSolverOption_2(type, 2, 8);
+            ret = SapModelClient.File.Save(originalFileFullPath);
+            //merge.
+
+            //string temp = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\6685132b-63b4-4b04-a62e-6a83707ac16a\8.10.20_6685132b-63b4-4b04-a62e-6a83707ac16a.sdb";
+            //ret = SapModelClient.Analyze.MergeAnalysisResults(temp);
+            string pDriveClientFilename = modelsToMerge[0];
+
+            ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
+
+
+
+
             //Open up the merged version after all is completed:
-            SapModelClient.File.OpenFile(newfilename); // this could be a copy if opening on the pdrive takes forever
 
             //Save back to initial filepath:
-            SapModelClient.File.Save(originalFileFullPath);
+            //SapModelClient.File.Save(originalFileFullPath);
 
             //Review Results.
 

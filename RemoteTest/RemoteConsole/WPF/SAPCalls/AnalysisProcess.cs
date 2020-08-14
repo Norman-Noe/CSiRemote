@@ -23,7 +23,7 @@ namespace WPF
         /// Process to run for each sapobject thats connected
         /// </summary>
         /// <returns></returns>
-        public void RunProcess(List<LoadCase> lcs, string newfilename, string currentfilename, string serverfilename, bool current)
+        public void RunProcess(List<LoadCase> lcs, string newfilename, bool current)
         {
             //wrap in a try catch and return false on catch
             //Use all 8 cores on each machine
@@ -34,9 +34,19 @@ namespace WPF
             int ret = 0;
 
             //Save locally somewhere
-            string appdataloc = @"\Computers and Structures\CORE\SAPELLITE\" + currentfilename;
-            string appdataloc2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string newlocalfilename = appdataloc2 + appdataloc;
+            //string appdataloc = @"\Computers and Structures\CORE\SAPELLITE\" + currentfilename;
+            //string appdataloc2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+
+            //string newlocalfilename = appdataloc2 + appdataloc;
+
+            //var dir = System.IO.Path.GetDirectoryName(newlocalfilename);
+
+            //if(!System.IO.Directory.Exists(dir))
+            //{
+            //    System.IO.Directory.CreateDirectory(dir);
+            //}
+
             //openfile
             if (!current)
             {
@@ -46,7 +56,7 @@ namespace WPF
                 ret = _SapModelServer.Analyze.SetSolverOption_2(type, 2, 8);
 
                 
-                ret = _SapModelServer.File.Save(newlocalfilename);
+                //ret = _SapModelServer.File.Save(newlocalfilename);
             }           
 
             //Set all load cases to false
@@ -60,7 +70,7 @@ namespace WPF
             ret = _SapModelServer.Analyze.RunAnalysis();
 
             //Merge to original
-            ret = _SapModelServer.File.Save(serverfilename);    
+            ret = _SapModelServer.File.Save(newfilename);    
              
             //Exit SAP
             if (!current)
