@@ -146,27 +146,27 @@ namespace WPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RunAnalysis_Click(object sender, RoutedEventArgs e)
+        private async void RunAnalysis_Click(object sender, RoutedEventArgs e)
         {
             //save model on p drive
             string originalFileFullPath = SapModelClient.GetModelFilename();
             string originalFileName = SapModelClient.GetModelFilename(false);
             string batchRunGuid = Guid.NewGuid().ToString();
             var basePath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE";
-
-            //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
-            List<LoadCase> groupeduploadcases = new List<LoadCase>();
+            
+            List<LoadCase> allLoadcases = new List<LoadCase>();
             foreach (LoadCase lc in InfillCases.Items)
             {
-                groupeduploadcases.Add(lc);
+                allLoadcases.Add(lc);
             }
 
-            var newgroup = groupeduploadcases.GroupBy(x => x._location);
+            var loadcasesGroupedByServerHost = allLoadcases.GroupBy(x => x._location);
 
-            //Make this a parallel loop after reviewed
+            //List to collect all locations.
             List<string> modelsToMerge = new List<string>();
 
-            foreach(var group in newgroup)
+            List<Task> analysisTasks = new List<Task>();
+            foreach(var group in loadcasesGroupedByServerHost)
             {
                 if (group.Key == "Client")
                 {
@@ -181,40 +181,60 @@ namespace WPF
                 }
                 else
                 {
-
+                    //The machine name and TCP port from the UI string
                     string location = group.First()._location;
-                    MachineLocation loc = ParseMachineInfo(location);
-                    string machinenumber = loc._MachineNumber;
-                    int tcpport = loc._Port;
-                    
-                    string clientModelDirectory = basePath + @"\" + batchRunGuid + @"\" + loc._MachineNumber + $"_{loc._Port}";
 
-                    System.IO.Directory.CreateDirectory(clientModelDirectory);
+                    //Create the task which will perform the analysis.
+                    Task t = CreateAnalysisTask(location, basePath, batchRunGuid, originalFileName, originalFileFullPath,
+                        group.ToList(), modelsToMerge);
+                    analysisTasks.Add(t);
 
-                    string machineSpecificModelOnPdrive = System.IO.Path.Combine(clientModelDirectory, originalFileName);
-
-                    System.IO.File.Copy(originalFileFullPath, machineSpecificModelOnPdrive);
-
-                    //start instance
-                    //send to a machine
-                    cOAPI SapObjectServer = null;
-                    cHelper HelperServer = new Helper();
-                    SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
-
-                    AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
-                    ap.RunProcess(group.ToList(), machineSpecificModelOnPdrive, false);
-                    modelsToMerge.Add(machineSpecificModelOnPdrive);
                 }             
             }
+            
+            //Start all tasks
+            foreach (var task in analysisTasks) task.Start();
+            
+            //Now wait for all of them to finish
+            Task.WaitAll(analysisTasks.ToArray());
 
-            //location of the analyzed model
-            //string pDriveClientFilename = modelsToMerge[0];
-
-            //merge the results.
+            //Merge the results back into the client model
             foreach (var pDriveClientFilename in modelsToMerge)
             {
                 int ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
             }
+        }
+
+        //Creates the task which will run the analysis on the server.
+        Task CreateAnalysisTask(string location, string basePath, string batchRunGuid, string originalFileName, 
+            string originalFileFullPath, List<LoadCase> groups, List<string> modelsToMerge)
+        {
+            Task t1 = new Task(() =>
+            {
+                MachineLocation loc = ParseMachineInfo(location);
+                string machinenumber = loc._MachineNumber;
+                int tcpport = loc._Port;
+
+                string clientModelDirectory = basePath + @"\" + batchRunGuid + @"\" + loc._MachineNumber + $"_{loc._Port}";
+
+                System.IO.Directory.CreateDirectory(clientModelDirectory);
+
+                string machineSpecificModelOnPdrive = System.IO.Path.Combine(clientModelDirectory, originalFileName);
+
+                System.IO.File.Copy(originalFileFullPath, machineSpecificModelOnPdrive);
+
+                //start instance
+                //send to a machine
+                cOAPI SapObjectServer = null;
+                cHelper HelperServer = new Helper();
+                SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
+
+                AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
+                ap.RunProcess(groups, machineSpecificModelOnPdrive, false);
+                modelsToMerge.Add(machineSpecificModelOnPdrive);
+
+            });
+            return t1;
         }
 
         //EMIL DO STUFF HERE!
