@@ -216,18 +216,24 @@ namespace WPF
 
 
             //original is opened - let's save it
+
+            /*
             int type = 0, proctype = 0, numcores = 0;
             string stiffcase = "";
             int ret = SapModelClient.Analyze.GetSolverOption_2(ref type, ref proctype, ref numcores, ref stiffcase);
             ret = SapModelClient.Analyze.SetSolverOption_2(type, 2, 8);
+
             ret = SapModelClient.File.Save(originalFileFullPath);
+            */
+
             //merge.
 
             //string temp = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\6685132b-63b4-4b04-a62e-6a83707ac16a\8.10.20_6685132b-63b4-4b04-a62e-6a83707ac16a.sdb";
             //ret = SapModelClient.Analyze.MergeAnalysisResults(temp);
+
             string pDriveClientFilename = modelsToMerge[0];
 
-            ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
+            int ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
 
 
 

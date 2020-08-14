@@ -70,7 +70,7 @@ namespace WPF
             ret = _SapModelServer.Analyze.RunAnalysis();
 
             //Merge to original
-            ret = _SapModelServer.File.Save(newfilename);    
+            //ret = _SapModelServer.File.Save(newfilename);    
              
             //Exit SAP
             if (!current)
