@@ -203,18 +203,16 @@ namespace WPF
             //Now wait for all of them to finish
             Task.WaitAll(analysisTasks.ToArray());
 
-            string localFolder = CopyAnalysisResultsToClientMachine(modelsToMerge.FirstOrDefault());
+            //string localFolder = CopyAnalysisResultsToClientMachine(modelsToMerge.FirstOrDefault());
 
             //Merge the results back into the client model
             foreach (var pDriveClientFilename in modelsToMerge)
             {
-                string local = GetLocalMirrorName(pDriveClientFilename);
+                //string local = GetLocalMirrorName(pDriveClientFilename);
 
-                int ret = SapModelClient.Analyze.MergeAnalysisResults(local);
+                int ret = SapModelClient.Analyze.MergeAnalysisResults(pDriveClientFilename);
             }
-            DeleteLocalResults(localFolder);
-
-
+            //DeleteLocalResults(localFolder);
         }
 
         //Creates the task which will run the analysis on the server.
