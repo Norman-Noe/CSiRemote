@@ -137,21 +137,29 @@ namespace WPF
         private void RunAnalysis_Click(object sender, RoutedEventArgs e)
         {
             //save model on p drive
-            string initialfilepath = SapModelClient.GetModelFilename();
-            string filename = SapModelClient.GetModelFilename(false);
+            string originalFileFullPath = SapModelClient.GetModelFilename();
+            string originalFileName = SapModelClient.GetModelFilename(false);
             string guid = Guid.NewGuid().ToString();
-            string appendedfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
-            string appendedserverfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\SERVER_MODELS\" + guid;
+
+            var basePath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE";
+
+            string clientModelDirectory = basePath + @"\CLIENT_MODELS\" + guid;
+            string serverModelDirectory = basePath + @"\SERVER_MODELS\" + guid;
+
+
+            //string appendedfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
+            //string appendedserverfilepath = @"\\windows.thorntontomasetti.com\FileSys\_Corp\CORE\Public\9_Temp\SAPELLITE\SERVER_MODELS\" + guid;
             //string appendedfilepath = @"P:\_Corp\CORE\Public\9_Temp\SAPELLITE\CLIENT_MODELS\" + guid;
-            System.IO.Directory.CreateDirectory(appendedfilepath);
-            System.IO.Directory.CreateDirectory(appendedserverfilepath);
+            System.IO.Directory.CreateDirectory(clientModelDirectory);
+            System.IO.Directory.CreateDirectory(serverModelDirectory);
 
-            string newname = filename.Insert(filename.Length - 4, "_" + guid);
-            string newfilename = System.IO.Path.Combine(appendedfilepath, newname);
-            string serverfilename = System.IO.Path.Combine(appendedserverfilepath, newname);
+            string newFileNameWithGuid = originalFileName.Insert(originalFileName.Length - 4, "_" + guid);
+
+            string newfilename = System.IO.Path.Combine(clientModelDirectory, newFileNameWithGuid);
+            string serverfilename = System.IO.Path.Combine(serverModelDirectory, newFileNameWithGuid);
 
 
-            System.IO.File.Copy(initialfilepath, newfilename);
+            System.IO.File.Copy(originalFileFullPath, newfilename);
 
             //List<List<LoadCase>> groupeduploadcases = new List<List<LoadCase>>();
             List<LoadCase> groupeduploadcases = new List<LoadCase>();
@@ -194,7 +202,7 @@ namespace WPF
                     SapObjectServer = HelperServer.CreateObjectProgIDHostPort(machinenumber, tcpport, "CSI.SAP2000.API.SapObject");
 
                     AnalysisProcess ap = new AnalysisProcess(SapObjectServer);
-                    ap.RunProcess(group.ToList(), newfilename, newname, serverfilename, false);
+                    ap.RunProcess(group.ToList(), newfilename, newFileNameWithGuid, serverfilename, false);
                 }             
             }
 
@@ -202,7 +210,7 @@ namespace WPF
             SapModelClient.File.OpenFile(newfilename); // this could be a copy if opening on the pdrive takes forever
 
             //Save back to initial filepath:
-            SapModelClient.File.Save(initialfilepath);
+            SapModelClient.File.Save(originalFileFullPath);
 
             //Review Results.
 
