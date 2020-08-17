@@ -36,12 +36,12 @@ namespace CORE.Sapellite.Orchestrator
 
         static void Main(string[] args)
         {
-
             Console.WriteLine("Launching Orchestrator");
-
             int count = 1;
+            int port = 5000;
+            TcpListener ServerSocket = new TcpListener(IPAddress.Any, port);
+            Console.WriteLine($"Sapellite Orchestrator listening on {Utils.GetLocalIPAddress()}:{port}");
 
-            TcpListener ServerSocket = new TcpListener(IPAddress.Any, 5000);
             ServerSocket.Start();
 
             while (true)

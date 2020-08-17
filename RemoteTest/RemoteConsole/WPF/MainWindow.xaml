@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
         mc:Ignorable="d"
-        Title="SAPELITTE" Height="600" Width="600">
+        Title="SAPELLITE" Height="600" Width="600">
     <Grid VerticalAlignment="Top" Height="500" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
